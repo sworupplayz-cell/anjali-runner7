@@ -14,29 +14,16 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
 
-     - name: Install dependencies
-  run: |
-    npm install
-    echo "=== Vite binary ==="
-    ls -l node_modules/.bin || true
-    file node_modules/.bin/vite || true
-
-- name: Build web app
-  run: |
-    npx vite --version
-    npm run build
+      - name: Install dependencies
+        run: npm install
 
       - name: Build web app
         run: npm run build
-
-      - name: Sync Capacitor
-        run: npx cap sync android
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -44,10 +31,10 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+      - name: Sync Capacitor
+        run: npx cap sync android
 
-      - name: Build Debug APK
+      - name: Build APK
         working-directory: android
         run: |
           chmod +x gradlew
